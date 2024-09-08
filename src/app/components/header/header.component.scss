@@ -1,6 +1,10 @@
+
 .header{
-  background-color: black;
-  height: 7%;
+  background-color: var(--color-1);
+  height: 50px;
+  h1{
+    font-weight: bold;
+  }
 }
 
 .example-spacer {
