@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { Status, Task } from "./task.model";
+import { ProgressStatus, Task } from "./task.model";
 import { BehaviorSubject, delay, of } from "rxjs";
 
 @Injectable({
@@ -13,21 +13,21 @@ export class TaskService{
         id:1,
         title:'task 1',
         description:'this is task 1',
-        status:Status.TO_DO,
+        status:ProgressStatus.TO_DO,
         priority:1
       } as Task,
       {
         id:2,
         title:'task 2',
         description:'this is task 2',
-        status:Status.IN_PROGRESS,
+        status:ProgressStatus.IN_PROGRESS,
         priority:1
       } as Task,
       {
         id:3,
         title:'task 3',
         description:'this is task 3',
-        status:Status.DONE,
+        status:ProgressStatus.DONE,
         priority:2
       } as Task,
     ]
@@ -38,9 +38,4 @@ export class TaskService{
   getTasks(){
     return this.tasks$.pipe(delay(1000));
   }
-
-  updateTasksOrder(tasks:Task[]){
-    this._tasks$.next([...tasks]);
-  }
-
 }

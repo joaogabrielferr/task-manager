@@ -3,37 +3,46 @@
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iste unde commodi accusantium eligendi animi maiores consequuntur, rem iusto nulla qui id ducimus soluta quam itaque, laboriosam ullam illum officia suscipit dolor. Sapiente provident pariatur at, placeat accusantium ea temporibus voluptatibus odio unde hic quasi enim, ut voluptatem obcaecati adipisci.
   </div>
   <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  @for (task of tasks; track task.id) {
-    <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
-      <div>
-        {{task.title}}
+
+
+  @if(loadingStatus === TasksLoadingStatus.success){
+    @for (task of tasks; track task.id) {
+      <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
+        <div>
+          {{task.title}}
+        </div>
+        <div class = "task-info">
+            @switch (task.status) {
+              @case(TaskProgress.TO_DO){
+                <span class="to_do">
+                  TO DO
+                </span>
+              }
+              @case(TaskProgress.IN_PROGRESS){
+                <span class="in_progress">
+                  IN PROGRESS
+                </span>
+              }
+              @case(TaskProgress.DONE){
+                <span class="done">
+                  DONE
+                </span>
+              }
+            }
+          <button mat-icon-button aria-label="Edit">
+            <mat-icon style="color:var(--color-4)" >edit</mat-icon>
+          </button>
+        </div>
       </div>
-      <div class = "task-info">
-          @switch (task.status) {
-            @case(StatusEnum.TO_DO){
-              <span class="to_do">
-                TO DO
-              </span>
-            }
-            @case(StatusEnum.IN_PROGRESS){
-              <span class="in_progress">
-                IN PROGRESS
-              </span>
-            }
-            @case(StatusEnum.DONE){
-              <span class="done">
-                DONE
-              </span>
-            }
-          }
-        <button mat-icon-button aria-label="Edit">
-          <mat-icon style="color:var(--color-4)" >edit</mat-icon>
-        </button>
-      </div>
-    </div>
-  }@empty {
-    <ngx-skeleton-loader [theme]="{height: '50px', background: '#21262d',marginBottom:'-5px'}" count="10" appearance="line" />
+    }@empty {
+      no tasks yet
+    }
   }
+
+  @if(loadingStatus === TasksLoadingStatus.pending || loadingStatus === TasksLoadingStatus.loading){
+    <ngx-skeleton-loader [theme]="{height: '50px', background: '#21262d',marginBottom:'-5px'}" count="8" appearance="line" />
+  }
+
   </div>
 
 

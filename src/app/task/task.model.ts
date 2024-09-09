@@ -1,11 +1,11 @@
-export enum Status{
+export enum ProgressStatus{
   TO_DO,IN_PROGRESS,DONE
 }
 
 export interface Task{
   id:number;
   title:string;
-  status: Status;
+  status: ProgressStatus;
   description:string;
   priority: number;
 }

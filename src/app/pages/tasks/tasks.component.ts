@@ -1,6 +1,6 @@
 import { Component, inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { TaskService } from '../../task/task.service';
-import { Status, Task } from '../../task/task.model';
+import { ProgressStatus, Task } from '../../task/task.model';
 import { Observable, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -8,6 +8,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import {MatButtonModule} from '@angular/material/button';
+import { Store } from '@ngrx/store';
+import { taskActions } from '../../task/state/task.actions';
+import { getTasksSelector, getTasksStatus } from '../../task/state/task.selectors';
+import { TaskState, TaskStatus } from '../../task/state/task.reducer';
 
 @Component({
   selector: 'app-tasks',
@@ -18,34 +22,35 @@ import {MatButtonModule} from '@angular/material/button';
 })
 export class TasksComponent implements OnInit,OnDestroy {
 
-  StatusEnum = Status;
-
   private taskService = inject(TaskService);
+  store = inject(Store);
+
+  TaskProgress = ProgressStatus;
+  TasksLoadingStatus = TaskStatus;
 
   tasks: Task[] = [];
-  tasksSubscription: Subscription = new Subscription();
+  tasksSubscription: Subscription = this.store.select(getTasksSelector).subscribe((tasks:Task[])=>this.tasks = tasks);
+
+  loadingStatus: TaskStatus = TaskStatus.pending;
+  loadingStatusSubscription: Subscription = this.store.select(getTasksStatus).subscribe((status=>this.loadingStatus = status));
+
+
 
   ngOnInit(): void {
-    this.tasksSubscription = this.taskService.getTasks().subscribe(tasks=>{
-      this.tasks = tasks;
-      console.log("new value:",this.tasks);
-    })
+    this.store.dispatch(taskActions.getTasks());
   }
 
 
   ngOnDestroy(): void {
-    if(this.tasksSubscription){
-      this.tasksSubscription.unsubscribe();
-    }
+    if(this.tasksSubscription)this.tasksSubscription.unsubscribe();
+    if(this.loadingStatusSubscription)this.loadingStatusSubscription.unsubscribe();
   }
 
   drop(event: CdkDragDrop<string[]>) {
-      moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
-      this.taskService.updateTasksOrder(this.tasks);
+     let newTasksOrder = [...this.tasks];
+      moveItemInArray(newTasksOrder, event.previousIndex, event.currentIndex);
+      this.store.dispatch(taskActions.updateTasksOrder({tasks:newTasksOrder}));
   }
 
-  getStatus(status:Status){
-
-  }
 
 }
