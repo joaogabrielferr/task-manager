@@ -10,41 +10,96 @@ export enum TaskStatus{
 }
 
 export interface TaskState{
-  tasks: Task[];
-  error: '' | null;
+  tasks: {[id:number]:Task};
+  tasksOrder: number[];
+  error: any | null;
   status: TaskStatus;
+  selectedTaskId:number | null;
+  selectedTaskError: any | null;
+  selectedTaskStatus: TaskStatus;
 }
 
 const inititalState: TaskState = {
   error:null,
   status:TaskStatus.pending,
-  tasks:[]
+  tasks:{},
+  tasksOrder:[],
+  selectedTaskId: null,
+  selectedTaskError:null,
+  selectedTaskStatus: TaskStatus.pending
 }
 
 export const taskReducer = createReducer(inititalState,
+
+
   on(taskActions.getTasks,(currentState)=>{
     return {
       ...currentState,
       status:TaskStatus.loading,
     };
   }),
+
+
   on(taskActions.getTasksSuccess,(currentState,tasksObj)=>{
+    const tasksById = tasksObj.tasks.reduce((entities,task)=>{
+      return {...entities,[task.id]:task};
+    },{});
+
+    const tasksOrder = tasksObj.tasks.map(task=>task.id);
+
     return {
       ...currentState,
-      tasks: tasksObj.tasks,
+      tasks: tasksById,
+      tasksOrder:tasksOrder,
       status:TaskStatus.success
     }
   }),
+
+
   on(taskActions.getTasksFailure,(currentState,error)=>{
     return {
       ...currentState,
-      status:TaskStatus.error
+      status:TaskStatus.error,
+      error: error.error
     };
   }),
-  on(taskActions.updateTasksOrder,(currentState,newTaskOrderObj)=>{
+
+
+  on(taskActions.updateTasksOrder,(currentState,newTaskOrder)=>{
     return {
       ...currentState,
-      tasks:newTaskOrderObj.tasks
+      tasksOrder:newTaskOrder.tasksIds
     };
-  })
+  }),
+
+
+  on(taskActions.addTask,(currentState,task)=>{
+    return {
+      ...currentState,
+      selectedTaskStatus: TaskStatus.loading
+    };
+  }),
+
+
+  on(taskActions.addTaskSuccess,(currentState,newTask)=>{
+    console.log("task added:",newTask);
+    return {
+      ...currentState,
+      tasks:{...currentState.tasks,[newTask.id]:newTask},
+      tasksOrder:[newTask.id,...currentState.tasksOrder],
+      selectedTaskStatus:TaskStatus.success
+    }
+  }),
+
+
+
+  on(taskActions.addTaskFailure,(currentState,error)=>{
+    return {
+      ...currentState,
+      selectedTaskError:error,
+      selectedTaskStatus:TaskStatus.error
+    }
+  }),
+
+
 )

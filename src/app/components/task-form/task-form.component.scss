@@ -1,0 +1,40 @@
+.form{
+  min-width: 150px;
+  max-width: 700px;
+  width: 100%;
+
+  mat-form-field:not(last-child){
+    margin-bottom: 10px;
+  }
+}
+
+.field-sm{
+  min-width: 200px;
+  width: 70% !important;
+  max-width: 100% !important;
+}
+
+.field-md{
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  border-top-color: #000000;
+  animation: spinner .8s linear infinite;
+}

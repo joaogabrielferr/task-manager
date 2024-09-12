@@ -6,6 +6,6 @@ export interface Task{
   id:number;
   title:string;
   status: ProgressStatus;
-  description:string;
+  description?:string;
   priority: number;
 }

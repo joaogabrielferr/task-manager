@@ -1,5 +1,4 @@
 .wrapper{
-  background-color: #333;
   height: 100%;
 }
 
@@ -43,16 +42,18 @@ mat-sidenav {
 
 mat-sidenav-content{
   background-color: #161b22;
+  // background-image: url("/see_you_space_cowboy.jpg");
 }
 
 .content-wrapper{
   min-height: 97%;
   padding-left:50px;
-  padding-right: 10px;
+  padding-right: 20px;
   padding-top: 10px;
   @media screen and (max-width:800px) {
     padding-left: 15px;
   }
+
 }
 
 // Move the content down so that it won't be hidden by the toolbar

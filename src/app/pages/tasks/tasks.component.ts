@@ -10,36 +10,53 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import {MatButtonModule} from '@angular/material/button';
 import { Store } from '@ngrx/store';
 import { taskActions } from '../../task/state/task.actions';
-import { getTasksSelector, getTasksStatus } from '../../task/state/task.selectors';
-import { TaskState, TaskStatus } from '../../task/state/task.reducer';
+import { getTasksAndOrderSelector, getTasksStatus } from '../../task/state/task.selectors';
+import { TaskStatus } from '../../task/state/task.reducer';
+import { TaskFormComponent } from "../../components/task-form/task-form.component";
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule,DragDropModule,MatIconModule,NgxSkeletonLoaderModule,MatButtonModule],
+  imports: [CommonModule, DragDropModule, MatIconModule, NgxSkeletonLoaderModule, MatButtonModule, TaskFormComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
 export class TasksComponent implements OnInit,OnDestroy {
 
-  private taskService = inject(TaskService);
   store = inject(Store);
 
   TaskProgress = ProgressStatus;
   TasksLoadingStatus = TaskStatus;
 
-  tasks: Task[] = [];
-  tasksSubscription: Subscription = this.store.select(getTasksSelector).subscribe((tasks:Task[])=>this.tasks = tasks);
+  tasks: {
+    entities:Task[],
+    tasksOrder:number[]
+  } = {
+    entities:[],
+    tasksOrder:[]
+  };
+
+  taskList: Array<Task> = new Array();
+
+  //subscribing manually to be able to use function moveItemInArray after dragging and dropping a task
+  tasksSubscription: Subscription = this.store.select(getTasksAndOrderSelector).subscribe((tasks)=>{
+    const entities = tasks.entities;
+    const order = tasks.tasksOrder;
+    this.taskList = new Array(order.length);
+    order.forEach((id,index)=>{
+      this.taskList[index] = entities[id];
+    });
+
+  });
 
   loadingStatus: TaskStatus = TaskStatus.pending;
   loadingStatusSubscription: Subscription = this.store.select(getTasksStatus).subscribe((status=>this.loadingStatus = status));
 
-
+  isTaskFormOpened: boolean = false;
 
   ngOnInit(): void {
     this.store.dispatch(taskActions.getTasks());
   }
-
 
   ngOnDestroy(): void {
     if(this.tasksSubscription)this.tasksSubscription.unsubscribe();
@@ -47,10 +64,15 @@ export class TasksComponent implements OnInit,OnDestroy {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-     let newTasksOrder = [...this.tasks];
-      moveItemInArray(newTasksOrder, event.previousIndex, event.currentIndex);
-      this.store.dispatch(taskActions.updateTasksOrder({tasks:newTasksOrder}));
+
+      moveItemInArray(this.taskList, event.previousIndex, event.currentIndex);
+      // console.log("new list:",this.taskList);
+      const newTaskOrder = this.taskList.map((task)=>task.id);
+      this.store.dispatch(taskActions.updateTasksOrder({tasksIds:newTaskOrder}));
   }
 
+  toggleFormView(){
+    this.isTaskFormOpened = !this.isTaskFormOpened;
+  }
 
 }

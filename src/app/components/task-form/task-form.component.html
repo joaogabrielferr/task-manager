@@ -1,0 +1,52 @@
+@if(form){
+    <form [formGroup]="form" class = "form">
+      <mat-form-field class="field-sm">
+        <mat-label>Enter the title</mat-label>
+        <input
+          matInput
+          placeholder="My task"
+          formControlName = "title"
+          required
+        />
+        @if (isControlInvalid('title')) {
+          <mat-error>You must enter a value</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="field-md">
+        <mat-label>Enter the description (optional)</mat-label>
+        <textarea
+          matInput
+          placeholder="This task is about..."
+          formControlName = "description"
+          required
+        ></textarea>
+        @if (isControlInvalid('description')) {
+          <mat-error>You must enter a value</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option [value]="1">1</mat-option>
+          <mat-option [value]="2">2</mat-option>
+          <mat-option [value]="3">3</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        @if(taskStatus === TaskStatusEnum.loading){
+            <button mat-flat-button
+            [class.spinner]="true"
+            [disabled]="true"
+            ></button>
+        }@else {
+          <button mat-flat-button
+            style="background-color:var(--button-primary)"
+            (click) = "addTask()"
+          >
+            <mat-icon>add</mat-icon> ADD NEW TASK
+          </button>
+          }
+      </div>
+
+    </form>
+}
