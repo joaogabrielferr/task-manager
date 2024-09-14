@@ -11,23 +11,35 @@
   background: var(--color-3);
   border-radius: 4px;
   overflow: hidden;
+
+  .example-box {
+    min-height: 50px;
+    padding: 10px 10px;
+    border-bottom: solid 1px #ccc;
+    color: white;
+    display: flex;
+    box-sizing: border-box;
+    cursor: move;
+    background: var(--color-3);
+    font-size: 14px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+
+    .example-box-inner{
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+    }
+
+
+  }
+
 }
 
-.example-box {
-  height: 50px;
-  padding: 10px 10px;
-  border-bottom: solid 1px #ccc;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-  cursor: move;
-  background: var(--color-3);
-  font-size: 14px;
-  overflow: hidden;
-}
 
 .cdk-drag-preview {
   border: none;

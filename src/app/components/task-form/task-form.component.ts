@@ -47,7 +47,6 @@ export class TaskFormComponent implements OnChanges{
 
   form: FormGroup = this.formBulder.group({
     title:['',Validators.required],
-    description:[''],
     priority:[1]
   });
 
@@ -79,7 +78,6 @@ export class TaskFormComponent implements OnChanges{
     const raw = this.form.getRawValue();
     if(!this.task)this.task = {} as Task;
     this.task.title = raw['title'];
-    this.task.description = raw['description'];
     this.task.priority = raw['priority'];
     this.task.status = ProgressStatus.TO_DO;
 

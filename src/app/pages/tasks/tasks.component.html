@@ -29,30 +29,32 @@
     @if(loadingStatus === TasksLoadingStatus.success){
       @for (task of taskList; track task.id) {
         <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
-          <div>
-            {{task.title}}
-          </div>
-          <div class = "task-info">
-              @switch (task.status) {
-                @case(TaskProgress.TO_DO){
-                  <span class="to_do">
-                    TO DO
-                  </span>
+          <div class = "example-box-inner">
+            <div>
+              {{task.title}}
+            </div>
+            <div class = "task-info">
+                @switch (task.status) {
+                  @case(TaskProgress.TO_DO){
+                    <span class="to_do">
+                      TO DO
+                    </span>
+                  }
+                  @case(TaskProgress.IN_PROGRESS){
+                    <span class="in_progress">
+                      IN PROGRESS
+                    </span>
+                  }
+                  @case(TaskProgress.DONE){
+                    <span class="done">
+                      DONE
+                    </span>
+                  }
                 }
-                @case(TaskProgress.IN_PROGRESS){
-                  <span class="in_progress">
-                    IN PROGRESS
-                  </span>
-                }
-                @case(TaskProgress.DONE){
-                  <span class="done">
-                    DONE
-                  </span>
-                }
-              }
-            <button mat-icon-button aria-label="Edit">
-              <mat-icon style="color:var(--color-4)" >edit</mat-icon>
-            </button>
+              <button mat-icon-button aria-label="Edit">
+                <mat-icon style="color:var(--color-4)" >edit</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       }@empty {

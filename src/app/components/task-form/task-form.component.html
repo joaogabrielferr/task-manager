@@ -12,18 +12,6 @@
           <mat-error>You must enter a value</mat-error>
         }
       </mat-form-field>
-      <mat-form-field class="field-md">
-        <mat-label>Enter the description (optional)</mat-label>
-        <textarea
-          matInput
-          placeholder="This task is about..."
-          formControlName = "description"
-          required
-        ></textarea>
-        @if (isControlInvalid('description')) {
-          <mat-error>You must enter a value</mat-error>
-        }
-      </mat-form-field>
       <mat-form-field>
         <mat-label>Priority</mat-label>
         <mat-select formControlName="priority">

@@ -5,14 +5,6 @@
     <mat-sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'" [ngClass]="{'collapsed': isCollapsed}"
     >
       <mat-nav-list>
-        <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" mat-list-item>
-          <span class="entry">
-            <mat-icon>house</mat-icon>
-            @if(!isCollapsed){
-              <span>HOME</span>
-            }
-          </span>
-        </a>
         <a routerLink="/tasks" routerLinkActive="active" ariaCurrentWhenActive="page" mat-list-item>
           <span class="entry">
             <mat-icon>task</mat-icon>

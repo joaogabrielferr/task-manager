@@ -11,7 +11,7 @@ export const getTasksEffect = createEffect(
       switchMap(()=>{
         console.log("calling get task on service");
         return taskService.getTasks().pipe(
-          map(tasks => taskActions.getTasksSuccess({tasks})),
+          map(data => taskActions.getTasksSuccess({data})),
           catchError(err=> of(taskActions.getTasksFailure({error:err}))),
         )
       })
@@ -31,5 +31,18 @@ export const addTaskEffect = createEffect(
       })
     )
 
+  },{functional:true}
+);
+
+export const updateTaskOrderEffect = createEffect(
+  (actions$ = inject(Actions),taskService = inject(TaskService))=>{
+    return actions$.pipe(
+      ofType(taskActions.updateTasksOrder),
+      switchMap((taskOrder)=>{
+        return taskService.updateTaskOrder(taskOrder.tasksIds).pipe(
+          map(order=> taskActions.updateTasksOrderSuccess({taskOrder:order}))
+        )
+      })
+    );
   },{functional:true}
 );

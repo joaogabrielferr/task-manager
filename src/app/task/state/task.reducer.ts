@@ -1,6 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
 import { ProgressStatus, Task } from "../task.model";
 import { taskActions } from "./task.actions";
+import { DB } from "../task.service";
+import { Action } from "rxjs/internal/scheduler/Action";
 
 export enum TaskStatus{
   loading = 'loading',
@@ -40,17 +42,16 @@ export const taskReducer = createReducer(inititalState,
   }),
 
 
-  on(taskActions.getTasksSuccess,(currentState,tasksObj)=>{
-    const tasksById = tasksObj.tasks.reduce((entities,task)=>{
+  on(taskActions.getTasksSuccess,(currentState,payload)=>{
+
+    const tasksById = payload.data.tasks.reduce((entities,task)=>{
       return {...entities,[task.id]:task};
     },{});
-
-    const tasksOrder = tasksObj.tasks.map(task=>task.id);
 
     return {
       ...currentState,
       tasks: tasksById,
-      tasksOrder:tasksOrder,
+      tasksOrder:payload.data.taskOrder,
       status:TaskStatus.success
     }
   }),
@@ -72,6 +73,12 @@ export const taskReducer = createReducer(inititalState,
     };
   }),
 
+  on(taskActions.updateTasksOrderSuccess,(currentState,taskOrderObj)=>{
+    return {
+      ...currentState,
+      tasksOrder:taskOrderObj.taskOrder
+    }
+  }),
 
   on(taskActions.addTask,(currentState,task)=>{
     return {
