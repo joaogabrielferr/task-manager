@@ -2,10 +2,6 @@
   <div class = "tasks">
 
     <div class = "section">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iste unde commodi accusantium eligendi animi maiores consequuntur, rem iusto nulla qui id ducimus soluta quam itaque, laboriosam ullam illum officia suscipit dolor. Sapiente provident pariatur at, placeat accusantium ea temporibus voluptatibus odio unde hic quasi enim, ut voluptatem obcaecati adipisci.
-    </div>
-
-    <div class = "section">
       @if(isTaskFormOpened){
         <button mat-flat-button (click) = "toggleFormView()">
           <mat-icon>close</mat-icon> CLOSE
@@ -29,6 +25,10 @@
     @if(loadingStatus === TasksLoadingStatus.success){
       @for (task of taskList; track task.id) {
         <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
+
+          @if(selectedTask?.task?.id === task.id && selectedTask?.deleteTaskStatus === TasksLoadingStatus.loading){
+            <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
+          }@else {
             <div class = "item-name">
               {{task.title}}
             </div>
@@ -62,11 +62,13 @@
                   </span>
 
 
-
-              <button mat-icon-button aria-label="Edit">
-                <mat-icon style="color:var(--color-4)" >edit</mat-icon>
+              <button mat-icon-button aria-label="Remove" (click) = "removeTask(task.id)">
+                <mat-icon style="color:var(--color-4)" >delete</mat-icon>
               </button>
             </div>
+          }
+
+
           <!-- <div class="example-box-drag-preview" *cdkDragPreview>
               {{task.title}}
           </div> -->

@@ -21,13 +21,11 @@ export class TaskService{
       const welcomeTask1 = {
         title:'New added tasks appear on this list',
         id:1,
-        priority:1,
         status:ProgressStatus.DONE,
       } as Task;
       const welcomeTask2 = {
         title:'Drag and drop tasks to change their order',
         id:2,
-        priority:1,
         status:ProgressStatus.TO_DO,
       } as Task;
       localStorage.setItem(this.LOCAL_STORAGE_KEY,JSON.stringify({tasks:[welcomeTask1,welcomeTask2],taskOrder:[2,1]} as DB));
@@ -93,6 +91,20 @@ export class TaskService{
     )
 
   };
+
+  deleteTask(id:number){
+    return this.getTasks().pipe(
+      switchMap((data:DB)=>{
+        const newState = {...data};
+        let index = newState.tasks.findIndex(t=>t.id == id)!;
+        newState.tasks.splice(index,1);
+        const indexOder = newState.taskOrder.findIndex(t=>t === id);
+        newState.taskOrder.splice(indexOder,1);
+        this.saveToLocalStorage(newState);
+        return of(id).pipe(delay(1000));
+      })
+    );
+  }
 
 
 }

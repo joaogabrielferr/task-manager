@@ -15,8 +15,9 @@ export const getSelectedTask = (appState:IAppState)=>{
   const id = appState.tasks.selectedTaskId;
   if(!id)return null;
   const task = appState.tasks.tasks[id];
-  const status = appState.tasks.selectedTaskChangeProgressStatus;
-  return {task,changeProgressStatus:status};
+  const changeProgressStatus = appState.tasks.selectedTaskChangeProgressStatus;
+  const deleteTaskStatus = appState.tasks.selectedTaskDeleteStatus;
+  return {task,changeProgressStatus,deleteTaskStatus};
 
 }
 

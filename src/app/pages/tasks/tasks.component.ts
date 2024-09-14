@@ -39,12 +39,13 @@ export class TasksComponent implements OnInit,OnDestroy {
   };
   taskList: Array<Task> = new Array();
   loadingStatus: TaskStatus = TaskStatus.pending;
-  selectedTask:{task:Task,changeProgressStatus:TaskStatus} | null = null;
+  selectedTask:{task:Task,changeProgressStatus:TaskStatus,deleteTaskStatus:TaskStatus} | null = null;
   isTaskFormOpened: boolean = false;
 
   ngOnInit(): void {
     this.store.dispatch(taskActions.getTasks());
-      //subscribing manually to be able to use function moveItemInArray after dragging and dropping a task
+
+    //subscribing manually to be able to use function moveItemInArray after dragging and dropping a task
     this.store.select(getTasksAndOrderSelector).
       pipe(
       takeUntil(this.unsubscribeAll)
@@ -97,6 +98,10 @@ export class TasksComponent implements OnInit,OnDestroy {
         return 'DONE';
 
     }
+  }
+
+  removeTask(id:number){
+    this.store.dispatch(taskActions.deleteSelectedTask({id}));
   }
 
 }

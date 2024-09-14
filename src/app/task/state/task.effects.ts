@@ -58,3 +58,16 @@ export const changeTaskProgressStatusEffect = createEffect(
     );
   }
   ,{functional:true});
+
+  export const removeTaskEffect = createEffect(
+    (actions$ = inject(Actions),taskService = inject(TaskService))=>{
+      return actions$.pipe(
+        ofType(taskActions.deleteSelectedTask),
+        switchMap((payload)=>{
+          return taskService.deleteTask(payload.id).pipe(
+            map(()=>taskActions.deleteSelectedTaskSuccess({id:payload.id})),
+            catchError(err => of(taskActions.deleteSelectedTaskFailure({error:err})))
+          )
+        })
+      )
+    },{functional:true});

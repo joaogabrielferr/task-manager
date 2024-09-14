@@ -2,6 +2,10 @@
     margin-bottom: 20px;
 }
 
+.tasks{
+  width: 100%;
+}
+
 .example-list {
   width: 100%;
   max-width: 100%;
@@ -13,7 +17,7 @@
   overflow: hidden;
 
   .example-box {
-    min-height: 80px;
+    min-height: 50px;
     padding: 10px 10px;
     border-bottom: solid 1px #ccc;
     color: white;
@@ -30,27 +34,35 @@
 
 
     .item-name{
-      flex-grow: 1; /* Allows it to take up available space */
-      flex-basis: 100px; /* Provides a minimum width before wrapping */
-      min-width: 0; /* Ensures it can shrink below content size */
-      word-wrap: break-word; /* Ensures text wraps when it hits the container's boundary */
+      flex-shrink: 1; /* Allows the div to shrink if needed */
+      width: 700px;
+      overflow: hidden; /* Hide overflowed content */
+      text-overflow: ellipsis; /* Add three dots for overflowed text */
+      white-space: nowrap; /* Prevent text from wrapping to the next line */
+
+      @media screen and (max-width:750px) {
+        max-width: 500px;
+      }
+
+      @media screen and (max-width:550px) {
+        max-width: 200px;
+      }
+
     }
 
     .task-info{
-      flex-shrink: 0; /* Prevents the second div from shrinking */
-      max-width: 200px;
-      height: 100%;
+      width: 150px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
       align-items: center;
 
       .progress-badge{
         border-radius: 3px;
         padding: 2px;
-        font-size: 12px;
+        font-size: 10px;
         height: 30px;
-        max-width: 150px;
-        min-width: 150px;
+        max-width: 110px;
+        min-width: 110px;
         display: flex;
         justify-content: space-between;
         align-items: center;

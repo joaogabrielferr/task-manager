@@ -20,6 +20,7 @@ export interface TaskState{
   selectedTaskError: any | null;
   selectedTaskStatus: TaskStatus;
   selectedTaskChangeProgressStatus:TaskStatus;
+  selectedTaskDeleteStatus:TaskStatus;
 }
 
 const inititalState: TaskState = {
@@ -30,7 +31,8 @@ const inititalState: TaskState = {
   selectedTaskId: null,
   selectedTaskError:null,
   selectedTaskStatus: TaskStatus.pending,
-  selectedTaskChangeProgressStatus: TaskStatus.pending
+  selectedTaskChangeProgressStatus: TaskStatus.pending,
+  selectedTaskDeleteStatus: TaskStatus.pending
 }
 
 export const taskReducer = createReducer(inititalState,
@@ -126,7 +128,41 @@ export const taskReducer = createReducer(inititalState,
       },
       selectedTaskChangeProgressStatus:TaskStatus.success
     }
-  })
+  }),
+
+  on(taskActions.deleteSelectedTask,(currentState,payload)=>{
+    return {
+      ...currentState,
+      selectedTaskId:payload.id,
+      selectedTaskDeleteStatus:TaskStatus.loading
+    }
+  }),
+
+  on(taskActions.deleteSelectedTaskSuccess,(currentState,payload)=>{
+    console.log("on success reducer, current state:",currentState);
+    const taskList = {...currentState.tasks};
+    let taskOrder = [...currentState.tasksOrder];
+    delete taskList[payload.id];
+    const index = taskOrder.findIndex(t=>t === payload.id);
+    taskOrder.splice(index,1);
+    return {
+      ...currentState,
+      tasks:taskList,
+      tasksOrder:taskOrder,
+      selectedTaskId:null,
+      selectedTaskDeleteStatus:TaskStatus.success
+    }
+  }),
+
+
+  on(taskActions.deleteSelectedTaskFailure,(currentState,payload)=>{
+    return {
+      ...currentState,
+      selectedTaskId:null,
+      selectedTaskDeleteStatus:TaskStatus.error
+    }
+  }),
+
 
 
 )

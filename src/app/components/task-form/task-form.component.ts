@@ -47,7 +47,6 @@ export class TaskFormComponent implements OnChanges{
 
   form: FormGroup = this.formBulder.group({
     title:['',Validators.required],
-    priority:[1]
   });
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,7 +77,6 @@ export class TaskFormComponent implements OnChanges{
     const raw = this.form.getRawValue();
     if(!this.task)this.task = {} as Task;
     this.task.title = raw['title'];
-    this.task.priority = raw['priority'];
     this.task.status = ProgressStatus.TO_DO;
 
     this.task.id ? this.store.dispatch(taskActions.editTask(this.task)) : this.store.dispatch(taskActions.addTask(this.task));

@@ -6,7 +6,7 @@ import { provideStore } from '@ngrx/store';
 import { appReducers } from './state/app.reducers';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
-import { addTaskEffect, changeTaskProgressStatusEffect, getTasksEffect, updateTaskOrderEffect } from './task/state/task.effects';
+import { addTaskEffect, changeTaskProgressStatusEffect, getTasksEffect, removeTaskEffect, updateTaskOrderEffect } from './task/state/task.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +23,6 @@ export const appConfig: ApplicationConfig = {
         traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
         connectInZone: true // If set to true, the connection is established within the Angular zone
     }),
-    provideEffects({getTasksEffect,addTaskEffect,updateTaskOrderEffect,changeTaskProgressStatusEffect}),
+    provideEffects({getTasksEffect,addTaskEffect,updateTaskOrderEffect,changeTaskProgressStatusEffect,removeTaskEffect}),
 ]
 };
