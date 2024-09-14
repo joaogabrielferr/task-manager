@@ -1,19 +1,18 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { provideStore } from '@ngrx/store';
 import { appReducers } from './state/app.reducers';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
-import { addTaskEffect, getTasksEffect, updateTaskOrderEffect } from './task/state/task.effects';
+import { addTaskEffect, changeTaskProgressStatusEffect, getTasksEffect, updateTaskOrderEffect } from './task/state/task.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes), provideAnimationsAsync('noop'),
+    provideAnimationsAsync(),
     provideStore(appReducers),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideStoreDevtools({
@@ -24,6 +23,6 @@ export const appConfig: ApplicationConfig = {
         traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
         connectInZone: true // If set to true, the connection is established within the Angular zone
     }),
-    provideEffects({getTasksEffect,addTaskEffect,updateTaskOrderEffect})
+    provideEffects({getTasksEffect,addTaskEffect,updateTaskOrderEffect,changeTaskProgressStatusEffect}),
 ]
 };

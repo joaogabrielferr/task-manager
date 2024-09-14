@@ -13,27 +13,63 @@
   overflow: hidden;
 
   .example-box {
-    min-height: 50px;
+    min-height: 80px;
     padding: 10px 10px;
     border-bottom: solid 1px #ccc;
     color: white;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     box-sizing: border-box;
     cursor: move;
     background: var(--color-3);
     font-size: 14px;
     overflow: hidden;
-    flex-wrap: nowrap;
+    width: 100%;
+    flex-wrap: wrap; /* This enables wrapping when there isn't enough space */
 
-    .example-box-inner{
-      width: 100%;
+
+    .item-name{
+      flex-grow: 1; /* Allows it to take up available space */
+      flex-basis: 100px; /* Provides a minimum width before wrapping */
+      min-width: 0; /* Ensures it can shrink below content size */
+      word-wrap: break-word; /* Ensures text wraps when it hits the container's boundary */
+    }
+
+    .task-info{
+      flex-shrink: 0; /* Prevents the second div from shrinking */
+      max-width: 200px;
+      height: 100%;
       display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
 
+      .progress-badge{
+        border-radius: 3px;
+        padding: 2px;
+        font-size: 12px;
+        height: 30px;
+        max-width: 150px;
+        min-width: 150px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .to_do{
+        background-color: #777;
+      }
+
+      .in_progress{
+        background-color: rgb(47, 143, 221);
+      }
+
+      .done{
+        background-color: rgb(62, 151, 62);
+      }
+
     }
+
 
 
   }
@@ -66,29 +102,28 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.task-info{
-  height: 100%;
+
+
+.cdk-drag-preview{
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  color: white;
+  overflow: hidden;
+}
 
-  span{
-    border-radius: 3px;
-    padding: 2px;
-    font-size: 12px;
-    min-width: 100px;
-  }
-
-  .to_do{
-    background-color: #777;
-  }
-
-  .in_progress{
-    background-color: rgb(47, 143, 221);
-  }
-
-  .done{
-    background-color: rgb(62, 151, 62);
-  }
-
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  border-top-color: #000000;
+  animation: spinner .8s linear infinite;
 }

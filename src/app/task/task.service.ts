@@ -81,5 +81,18 @@ export class TaskService{
     );
   }
 
+  changeTaskStatus(selectedTaskId:number,newStatus:ProgressStatus):Observable<Task>{
+    return this.getTasks().pipe(
+      switchMap((data:DB)=>{
+        const newState = {...data};
+        let index = newState.tasks.findIndex(t=>t.id == selectedTaskId)!;
+        newState.tasks[index].status = newStatus;
+        this.saveToLocalStorage(newState);
+        return of(newState.tasks[index]).pipe(delay(1000));
+      })
+    )
+
+  };
+
 
 }

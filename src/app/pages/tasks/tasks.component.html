@@ -29,33 +29,47 @@
     @if(loadingStatus === TasksLoadingStatus.success){
       @for (task of taskList; track task.id) {
         <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
-          <div class = "example-box-inner">
-            <div>
+            <div class = "item-name">
               {{task.title}}
             </div>
             <div class = "task-info">
-                @switch (task.status) {
-                  @case(TaskProgress.TO_DO){
-                    <span class="to_do">
-                      TO DO
+                <span class = "progress-badge"
+                  [ngClass] = "{
+                    'to_do':task.status === TaskProgress.TO_DO,
+                    'in_progress':task.status === TaskProgress.IN_PROGRESS,
+                    'done':task.status === TaskProgress.DONE
+                  }"
+                  >
+                  @if(selectedTask?.task?.id === task.id && selectedTask?.changeProgressStatus === TasksLoadingStatus.loading;){
+                    <span style="display: flex;justify-content: center;align-items: center;">
+                      <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
                     </span>
+                  }@else {
+                      <span>
+                        {{getProgressStatusName(task.status)}}
+                      </span>
+                      <span>
+                        <button mat-icon-button aria-label="change progress status" [matMenuTriggerFor]="menu">
+                          <mat-icon style="color:white" >keyboard_arrow_down</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item *ngIf = "task.status != TaskProgress.TO_DO" (click) = "changeStatus(task,TaskProgress.TO_DO)">TO DO</button>
+                            <button mat-menu-item *ngIf = "task.status != TaskProgress.IN_PROGRESS" (click) = "changeStatus(task,TaskProgress.IN_PROGRESS)">IN PROGRESS</button>
+                            <button mat-menu-item *ngIf = "task.status != TaskProgress.DONE" (click) = "changeStatus(task,TaskProgress.DONE)">DONE</button>
+                        </mat-menu>
+                      </span>
                   }
-                  @case(TaskProgress.IN_PROGRESS){
-                    <span class="in_progress">
-                      IN PROGRESS
-                    </span>
-                  }
-                  @case(TaskProgress.DONE){
-                    <span class="done">
-                      DONE
-                    </span>
-                  }
-                }
+                  </span>
+
+
+
               <button mat-icon-button aria-label="Edit">
                 <mat-icon style="color:var(--color-4)" >edit</mat-icon>
               </button>
             </div>
-          </div>
+          <!-- <div class="example-box-drag-preview" *cdkDragPreview>
+              {{task.title}}
+          </div> -->
         </div>
       }@empty {
         no tasks yet

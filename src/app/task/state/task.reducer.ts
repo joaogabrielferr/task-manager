@@ -19,6 +19,7 @@ export interface TaskState{
   selectedTaskId:number | null;
   selectedTaskError: any | null;
   selectedTaskStatus: TaskStatus;
+  selectedTaskChangeProgressStatus:TaskStatus;
 }
 
 const inititalState: TaskState = {
@@ -28,7 +29,8 @@ const inititalState: TaskState = {
   tasksOrder:[],
   selectedTaskId: null,
   selectedTaskError:null,
-  selectedTaskStatus: TaskStatus.pending
+  selectedTaskStatus: TaskStatus.pending,
+  selectedTaskChangeProgressStatus: TaskStatus.pending
 }
 
 export const taskReducer = createReducer(inititalState,
@@ -89,7 +91,6 @@ export const taskReducer = createReducer(inititalState,
 
 
   on(taskActions.addTaskSuccess,(currentState,newTask)=>{
-    console.log("task added:",newTask);
     return {
       ...currentState,
       tasks:{...currentState.tasks,[newTask.id]:newTask},
@@ -107,6 +108,25 @@ export const taskReducer = createReducer(inititalState,
       selectedTaskStatus:TaskStatus.error
     }
   }),
+
+  on(taskActions.changeProgressStatus,(currentState,newStatusObj)=>{
+    return {
+      ...currentState,
+      selectedTaskId:newStatusObj.selectedTaskId,
+      selectedTaskChangeProgressStatus:TaskStatus.loading
+    }
+  }),
+
+  on(taskActions.changeProgressStatusSuccess,(currentState,task:Task)=>{
+    return {
+      ...currentState,
+      tasks:{
+        ...currentState.tasks,
+        [task.id]:task
+      },
+      selectedTaskChangeProgressStatus:TaskStatus.success
+    }
+  })
 
 
 )

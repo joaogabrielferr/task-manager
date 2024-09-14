@@ -9,7 +9,6 @@ export const getTasksEffect = createEffect(
     return actions$.pipe(
       ofType(taskActions.getTasks),
       switchMap(()=>{
-        console.log("calling get task on service");
         return taskService.getTasks().pipe(
           map(data => taskActions.getTasksSuccess({data})),
           catchError(err=> of(taskActions.getTasksFailure({error:err}))),
@@ -46,3 +45,16 @@ export const updateTaskOrderEffect = createEffect(
     );
   },{functional:true}
 );
+
+export const changeTaskProgressStatusEffect = createEffect(
+  (actions$ = inject(Actions),taskService = inject(TaskService))=>{
+    return actions$.pipe(
+      ofType(taskActions.changeProgressStatus),
+      switchMap((newTaskObj)=>{
+        return taskService.changeTaskStatus(newTaskObj.selectedTaskId,newTaskObj.newStatus).pipe(
+          map(task => taskActions.changeProgressStatusSuccess(task))
+        )
+      })
+    );
+  }
+  ,{functional:true});

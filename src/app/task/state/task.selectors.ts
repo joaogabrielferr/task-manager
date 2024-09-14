@@ -13,7 +13,11 @@ export const getTasksStatus = (appState:IAppState)=>{
 
 export const getSelectedTask = (appState:IAppState)=>{
   const id = appState.tasks.selectedTaskId;
-  return id ? appState.tasks.tasks[id] : null;
+  if(!id)return null;
+  const task = appState.tasks.tasks[id];
+  const status = appState.tasks.selectedTaskChangeProgressStatus;
+  return {task,changeProgressStatus:status};
+
 }
 
 export const getSelectedTaskStatus = (appState:IAppState)=>{
