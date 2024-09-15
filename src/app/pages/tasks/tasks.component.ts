@@ -15,18 +15,32 @@ import { TaskStatus } from '../../task/state/task.reducer';
 import { TaskFormComponent } from "../../components/task-form/task-form.component";
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { ConfirmationModalComponent } from '../../components/confirmation-modal/confirmation-modal.component';
 
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, DragDropModule, MatIconModule, NgxSkeletonLoaderModule, MatButtonModule, TaskFormComponent,CdkDragPreview,MatMenuModule,MatProgressSpinnerModule],
+  imports: [CommonModule, DragDropModule, MatIconModule, NgxSkeletonLoaderModule, MatButtonModule, TaskFormComponent, CdkDragPreview, MatMenuModule, MatProgressSpinnerModule, ConfirmationModalComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
 export class TasksComponent implements OnInit,OnDestroy {
 
   store = inject(Store);
+  readonly dialog = inject(MatDialog);
+
+
+
   private unsubscribeAll: Subject<any> = new Subject<any>();
   TaskProgress = ProgressStatus;
   TasksLoadingStatus = TaskStatus;
@@ -102,6 +116,18 @@ export class TasksComponent implements OnInit,OnDestroy {
 
   removeTask(id:number){
     this.store.dispatch(taskActions.deleteSelectedTask({id}));
+  }
+
+  openDialog(id:number): void {
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: {title: "Delete task", text:"Do you really want to delete this task?"},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.removeTask(id);
+      }
+    });
   }
 
 }

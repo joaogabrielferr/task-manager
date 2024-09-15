@@ -19,7 +19,6 @@
   .example-box {
     min-height: 50px;
     padding: 10px 10px;
-    border-bottom: solid 1px #ccc;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -39,6 +38,7 @@
       overflow: hidden; /* Hide overflowed content */
       text-overflow: ellipsis; /* Add three dots for overflowed text */
       white-space: nowrap; /* Prevent text from wrapping to the next line */
+      font-size: 16px;
 
       @media screen and (max-width:750px) {
         max-width: 500px;
@@ -85,6 +85,11 @@
 
 
   }
+
+  .example-box:not(:last-child){
+    border-bottom: solid 1px var(--color-4);
+  }
+
 
 }
 

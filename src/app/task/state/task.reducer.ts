@@ -139,7 +139,6 @@ export const taskReducer = createReducer(inititalState,
   }),
 
   on(taskActions.deleteSelectedTaskSuccess,(currentState,payload)=>{
-    console.log("on success reducer, current state:",currentState);
     const taskList = {...currentState.tasks};
     let taskOrder = [...currentState.tasksOrder];
     delete taskList[payload.id];

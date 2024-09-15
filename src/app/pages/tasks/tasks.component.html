@@ -8,7 +8,7 @@
         </button>
       }@else{
         <button mat-flat-button style="background-color:var(--button-primary)" (click) = "toggleFormView()">
-          <mat-icon>add</mat-icon> ADD NEW TASK
+          <mat-icon>add</mat-icon> CREATE TASK
         </button>
       }
     </div>
@@ -62,7 +62,7 @@
                   </span>
 
 
-              <button mat-icon-button aria-label="Remove" (click) = "removeTask(task.id)">
+              <button mat-icon-button aria-label="Remove" (click) = "openDialog(task.id)">
                 <mat-icon style="color:var(--color-4)" >delete</mat-icon>
               </button>
             </div>
@@ -84,6 +84,4 @@
 
     </div>
   </div>
-
-
 </div>
