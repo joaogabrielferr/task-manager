@@ -25,18 +25,17 @@ import { taskActions } from '../../state/task.actions';
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
 })
-export class TaskFormComponent implements OnChanges{
+export class TaskFormComponent{
 
   store = inject(Store);
   formBulder = inject(FormBuilder);
   private _snackBar = inject(MatSnackBar);
 
-  @Input()
-  task!: Task;
-
   taskStatus!:TaskStatus;
 
   addTaskCalled:boolean = false;
+
+  task!:Task;
 
   taskStatusSubscription = this.store.select(getSelectedTask).subscribe((selectedTask)=>{
     this.taskStatus = selectedTask?.status;
@@ -52,23 +51,19 @@ export class TaskFormComponent implements OnChanges{
     title:['',Validators.required],
   });
 
-  ngOnChanges(changes: SimpleChanges): void {
-      if(this.task?.id){
-        this.updateForm();
-      }
-  }
+
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
   }
 
-  updateForm(){
-    Object.keys(this.form.controls).forEach((control)=>{
-      if(this.task[control as keyof Task]){
-        this.form.get(control)?.setValue(this.task[control as keyof Task]);
-      }
-    })
-  }
+  // updateForm(){
+  //   Object.keys(this.form.controls).forEach((control)=>{
+  //     if(this.task[control as keyof Task]){
+  //       this.form.get(control)?.setValue(this.task[control as keyof Task]);
+  //     }
+  //   })
+  // }
 
 
   isControlInvalid(control:string){
