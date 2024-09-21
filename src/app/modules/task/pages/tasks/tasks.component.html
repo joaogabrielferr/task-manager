@@ -7,7 +7,7 @@
           <mat-icon>close</mat-icon> CLOSE
         </button>
       }@else{
-        <button mat-flat-button style="background-color:var(--button-primary)" (click) = "toggleFormView()">
+        <button mat-flat-button style="background-color:var(--button-primary)" (click) = "toggleFormView()" data-testid = "create-task">
           <mat-icon>add</mat-icon> CREATE TASK
         </button>
       }
@@ -24,7 +24,7 @@
     <div cdkDropList class="example-list section" (cdkDropListDropped)="drop($event)">
     @if(loadingStatus === TasksLoadingStatus.success){
       @for (task of taskList; track task.id) {
-        <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
+        <div  class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
 
           @if(selectedTask?.id === task.id && selectedTask?.deleteStatus === TasksLoadingStatus.loading){
             <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
@@ -64,7 +64,7 @@
                   </span>
 
 
-              <button mat-icon-button aria-label="Remove" (click) = "openDialog(task.id)">
+              <button mat-icon-button aria-label="Remove" (click) = "openDialog(task.id)" data-testid = "delete-button">
                 <mat-icon style="color:var(--color-4)" >delete</mat-icon>
               </button>
               }

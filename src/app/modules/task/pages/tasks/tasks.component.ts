@@ -49,7 +49,6 @@ export class TasksComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(taskActions.getTasks());
-
     //subscribing manually to be able to use function moveItemInArray after dragging and dropping a task
     this.store.select(getTasksAndOrderSelector).
       pipe(
