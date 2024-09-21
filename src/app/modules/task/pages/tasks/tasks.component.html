@@ -33,6 +33,12 @@
               {{task.title}}
             </div>
             <div class = "task-info">
+              @if(selectedTask?.id === task.id && selectedTask?.changeProgressStatus === TasksLoadingStatus.loading;){
+                <span style="display: flex;justify-content: center;align-items: center;">
+                  <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
+                </span>
+
+              }@else {
                 <span class = "progress-badge"
                   [ngClass] = "{
                     'to_do':task.status === TaskProgress.TO_DO,
@@ -40,11 +46,7 @@
                     'done':task.status === TaskProgress.DONE
                   }"
                   >
-                  @if(selectedTask?.id === task.id && selectedTask?.changeProgressStatus === TasksLoadingStatus.loading;){
-                    <span style="display: flex;justify-content: center;align-items: center;">
-                      <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
-                    </span>
-                  }@else {
+
                       <span>
                         {{getProgressStatusName(task.status)}}
                       </span>
@@ -58,13 +60,14 @@
                             <button mat-menu-item *ngIf = "task.status != TaskProgress.DONE" (click) = "changeStatus(task,TaskProgress.DONE)">DONE</button>
                         </mat-menu>
                       </span>
-                  }
+
                   </span>
 
 
               <button mat-icon-button aria-label="Remove" (click) = "openDialog(task.id)">
                 <mat-icon style="color:var(--color-4)" >delete</mat-icon>
               </button>
+              }
             </div>
           }
 
