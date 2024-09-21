@@ -1,6 +1,6 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -8,7 +8,6 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { map, Observable, Subscription, tap } from 'rxjs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { ProgressStatus, Task } from '../../task.model';
@@ -37,10 +36,13 @@ export class TaskFormComponent implements OnChanges{
 
   taskStatus!:TaskStatus;
 
+  addTaskCalled:boolean = false;
+
   taskStatusSubscription = this.store.select(getSelectedTask).subscribe((selectedTask)=>{
     this.taskStatus = selectedTask?.status;
-    if(this.taskStatus === TaskStatus.success){
+    if(this.taskStatus === TaskStatus.success && this.addTaskCalled){
       this.openSnackBar("Task added!","close");
+      this.addTaskCalled = false;
     }
   });
 
@@ -79,7 +81,7 @@ export class TaskFormComponent implements OnChanges{
     if(!this.task)this.task = {} as Task;
     this.task.title = raw['title'];
     this.task.status = ProgressStatus.TO_DO;
-
+    this.addTaskCalled = true;
     this.task.id ? this.store.dispatch(taskActions.editTask(this.task)) : this.store.dispatch(taskActions.addTask(this.task));
 
   }
