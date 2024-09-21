@@ -26,7 +26,7 @@
       @for (task of taskList; track task.id) {
         <div class="example-box" cdkDragBoundary=".example-list" cdkDragLockAxis="y" cdkDrag>
 
-          @if(selectedTask?.task?.id === task.id && selectedTask?.deleteTaskStatus === TasksLoadingStatus.loading){
+          @if(selectedTask?.id === task.id && selectedTask?.deleteStatus === TasksLoadingStatus.loading){
             <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
           }@else {
             <div class = "item-name">
@@ -40,7 +40,7 @@
                     'done':task.status === TaskProgress.DONE
                   }"
                   >
-                  @if(selectedTask?.task?.id === task.id && selectedTask?.changeProgressStatus === TasksLoadingStatus.loading;){
+                  @if(selectedTask?.id === task.id && selectedTask?.changeProgressStatus === TasksLoadingStatus.loading;){
                     <span style="display: flex;justify-content: center;align-items: center;">
                       <mat-spinner [color]="'#fff'" [diameter]="20"></mat-spinner>
                     </span>

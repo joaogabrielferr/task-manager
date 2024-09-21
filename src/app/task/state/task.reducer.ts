@@ -11,28 +11,38 @@ export enum TaskStatus{
   success = 'success'
 }
 
+
+export interface SelectedTask{
+  id:number | null;
+  status: TaskStatus; // Consolidated status for selected task
+  error:any; // Error specific to the selected task
+  changeProgressStatus: TaskStatus; // Status for progress changes
+  deleteStatus: TaskStatus; // Status for task deletion
+
+}
+
 export interface TaskState{
   tasks: {[id:number]:Task};
   tasksOrder: number[];
   error: any | null;
   status: TaskStatus;
-  selectedTaskId:number | null;
-  selectedTaskError: any | null;
-  selectedTaskStatus: TaskStatus;
-  selectedTaskChangeProgressStatus:TaskStatus;
-  selectedTaskDeleteStatus:TaskStatus;
+  selectedTask: SelectedTask;
 }
+
+
 
 const inititalState: TaskState = {
   error:null,
   status:TaskStatus.pending,
   tasks:{},
   tasksOrder:[],
-  selectedTaskId: null,
-  selectedTaskError:null,
-  selectedTaskStatus: TaskStatus.pending,
-  selectedTaskChangeProgressStatus: TaskStatus.pending,
-  selectedTaskDeleteStatus: TaskStatus.pending
+  selectedTask:{
+    id:null,
+    status:TaskStatus.pending,
+    error:null,
+    changeProgressStatus:TaskStatus.pending,
+    deleteStatus:TaskStatus.pending
+  } as SelectedTask
 }
 
 export const taskReducer = createReducer(inititalState,
@@ -48,6 +58,7 @@ export const taskReducer = createReducer(inititalState,
 
   on(taskActions.getTasksSuccess,(currentState,payload)=>{
 
+    //create object where tasks are indexed by their id
     const tasksById = payload.data.tasks.reduce((entities,task)=>{
       return {...entities,[task.id]:task};
     },{});
@@ -87,7 +98,7 @@ export const taskReducer = createReducer(inititalState,
   on(taskActions.addTask,(currentState,task)=>{
     return {
       ...currentState,
-      selectedTaskStatus: TaskStatus.loading
+      selectedTask:{...currentState.selectedTask,status:TaskStatus.loading}
     };
   }),
 
@@ -97,7 +108,7 @@ export const taskReducer = createReducer(inititalState,
       ...currentState,
       tasks:{...currentState.tasks,[newTask.id]:newTask},
       tasksOrder:[newTask.id,...currentState.tasksOrder],
-      selectedTaskStatus:TaskStatus.success
+      selectedTask:{...currentState.selectedTask,id:newTask.id,status:TaskStatus.success}
     }
   }),
 
@@ -106,16 +117,18 @@ export const taskReducer = createReducer(inititalState,
   on(taskActions.addTaskFailure,(currentState,error)=>{
     return {
       ...currentState,
-      selectedTaskError:error,
-      selectedTaskStatus:TaskStatus.error
+      selectedTask:{...currentState.selectedTask,status:TaskStatus.error,error}
     }
   }),
 
-  on(taskActions.changeProgressStatus,(currentState,newStatusObj)=>{
+  on(taskActions.changeProgressStatus,(currentState,payload)=>{
     return {
       ...currentState,
-      selectedTaskId:newStatusObj.selectedTaskId,
-      selectedTaskChangeProgressStatus:TaskStatus.loading
+      selectedTask:{
+        ...currentState.selectedTask,
+        id:payload.selectedTaskId,
+        changeProgressStatus:TaskStatus.loading
+      }
     }
   }),
 
@@ -126,15 +139,14 @@ export const taskReducer = createReducer(inititalState,
         ...currentState.tasks,
         [task.id]:task
       },
-      selectedTaskChangeProgressStatus:TaskStatus.success
+      selectedTask:{...currentState.selectedTask,changeProgressStatus:TaskStatus.success}
     }
   }),
 
   on(taskActions.deleteSelectedTask,(currentState,payload)=>{
     return {
       ...currentState,
-      selectedTaskId:payload.id,
-      selectedTaskDeleteStatus:TaskStatus.loading
+      selectedTask:{...currentState.selectedTask,id:payload.id,deleteStatus:TaskStatus.loading}
     }
   }),
 
@@ -148,8 +160,7 @@ export const taskReducer = createReducer(inititalState,
       ...currentState,
       tasks:taskList,
       tasksOrder:taskOrder,
-      selectedTaskId:null,
-      selectedTaskDeleteStatus:TaskStatus.success
+      selectedTask:{...currentState.selectedTask,deleteStatus:TaskStatus.success}
     }
   }),
 
@@ -157,8 +168,7 @@ export const taskReducer = createReducer(inititalState,
   on(taskActions.deleteSelectedTaskFailure,(currentState,payload)=>{
     return {
       ...currentState,
-      selectedTaskId:null,
-      selectedTaskDeleteStatus:TaskStatus.error
+      selectedTask:{...currentState.selectedTask,deleteStatus:TaskStatus.error}
     }
   }),
 

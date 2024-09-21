@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TaskStatus } from '../../task/state/task.reducer';
 import { taskActions } from '../../task/state/task.actions';
-import { getSelectedTask, getSelectedTaskStatus } from '../../task/state/task.selectors';
+import { getSelectedTask } from '../../task/state/task.selectors';
 import { map, Observable, Subscription, tap } from 'rxjs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -36,8 +36,9 @@ export class TaskFormComponent implements OnChanges{
   task!: Task;
 
   taskStatus!:TaskStatus;
-  taskStatusSubscription = this.store.select(getSelectedTaskStatus).subscribe((status)=>{
-    this.taskStatus = status;
+
+  taskStatusSubscription = this.store.select(getSelectedTask).subscribe((selectedTask)=>{
+    this.taskStatus = selectedTask?.status;
     if(this.taskStatus === TaskStatus.success){
       this.openSnackBar("Task added!","close");
     }

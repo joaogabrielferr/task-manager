@@ -11,19 +11,11 @@ import {MatButtonModule} from '@angular/material/button';
 import { Store } from '@ngrx/store';
 import { taskActions } from '../../task/state/task.actions';
 import { getSelectedTask, getTasksAndOrderSelector, getTasksStatus } from '../../task/state/task.selectors';
-import { TaskStatus } from '../../task/state/task.reducer';
+import { SelectedTask, TaskStatus } from '../../task/state/task.reducer';
 import { TaskFormComponent } from "../../components/task-form/task-form.component";
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import { ConfirmationModalComponent } from '../../components/confirmation-modal/confirmation-modal.component';
 
 
@@ -39,9 +31,8 @@ export class TasksComponent implements OnInit,OnDestroy {
   store = inject(Store);
   readonly dialog = inject(MatDialog);
 
-
-
   private unsubscribeAll: Subject<any> = new Subject<any>();
+
   TaskProgress = ProgressStatus;
   TasksLoadingStatus = TaskStatus;
   tasks: {
@@ -51,9 +42,10 @@ export class TasksComponent implements OnInit,OnDestroy {
     entities:[],
     tasksOrder:[]
   };
+
   taskList: Array<Task> = new Array();
   loadingStatus: TaskStatus = TaskStatus.pending;
-  selectedTask:{task:Task,changeProgressStatus:TaskStatus,deleteTaskStatus:TaskStatus} | null = null;
+  selectedTask: SelectedTask | null = null;
   isTaskFormOpened: boolean = false;
 
   ngOnInit(): void {
@@ -88,7 +80,6 @@ export class TasksComponent implements OnInit,OnDestroy {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-
       moveItemInArray(this.taskList, event.previousIndex, event.currentIndex);
       const newTaskOrder = this.taskList.map((task)=>task.id);
       this.store.dispatch(taskActions.updateTasksOrder({tasksIds:newTaskOrder}));
@@ -110,7 +101,6 @@ export class TasksComponent implements OnInit,OnDestroy {
         return 'IN PROGRESS';
       case ProgressStatus.DONE:
         return 'DONE';
-
     }
   }
 

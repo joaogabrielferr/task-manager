@@ -12,15 +12,16 @@ export const getTasksStatus = (appState:IAppState)=>{
 }
 
 export const getSelectedTask = (appState:IAppState)=>{
-  const id = appState.tasks.selectedTaskId;
-  if(!id)return null;
-  const task = appState.tasks.tasks[id];
-  const changeProgressStatus = appState.tasks.selectedTaskChangeProgressStatus;
-  const deleteTaskStatus = appState.tasks.selectedTaskDeleteStatus;
-  return {task,changeProgressStatus,deleteTaskStatus};
+  // const id = appState.tasks.selectedTaskId;
+  const selectedTask = appState.tasks?.selectedTask;
+  return selectedTask;
+  // const task = appState.tasks.tasks[id];
+  // const changeProgressStatus = appState.tasks.selectedTaskChangeProgressStatus;
+  // const deleteTaskStatus = appState.tasks.selectedTaskDeleteStatus;
+  // return {task,changeProgressStatus,deleteTaskStatus};
 
 }
 
-export const getSelectedTaskStatus = (appState:IAppState)=>{
-  return appState.tasks.selectedTaskStatus;
-}
+// export const getSelectedTaskStatus = (appState:IAppState)=>{
+//   return appState.tasks.selectedTaskStatus;
+// }
