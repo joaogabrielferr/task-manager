@@ -1,6 +1,4 @@
 import { Component, inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { TaskService } from '../../task/task.service';
-import { ProgressStatus, Task } from '../../task/task.model';
 import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -9,14 +7,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import {MatButtonModule} from '@angular/material/button';
 import { Store } from '@ngrx/store';
-import { taskActions } from '../../task/state/task.actions';
-import { getSelectedTask, getTasksAndOrderSelector, getTasksStatus } from '../../task/state/task.selectors';
-import { SelectedTask, TaskStatus } from '../../task/state/task.reducer';
 import { TaskFormComponent } from "../../components/task-form/task-form.component";
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDialog} from '@angular/material/dialog';
-import { ConfirmationModalComponent } from '../../components/confirmation-modal/confirmation-modal.component';
+import { ProgressStatus, Task } from '../../task.model';
+import { SelectedTask, TaskStatus } from '../../state/task.reducer';
+import { taskActions } from '../../state/task.actions';
+import { getSelectedTask, getTasksAndOrderSelector, getTasksStatus } from '../../state/task.selectors';
+import { ConfirmationModalComponent } from '../../../../components/confirmation-modal/confirmation-modal.component';
 
 
 @Component({

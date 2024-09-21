@@ -1,4 +1,4 @@
-import { TaskState } from "../task/state/task.reducer";
+import { TaskState } from "../modules/task/state/task.reducer";
 
 
 export interface IAppState{

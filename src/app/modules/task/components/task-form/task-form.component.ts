@@ -1,6 +1,5 @@
 import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ProgressStatus, Task } from '../../task/task.model';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -9,12 +8,13 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { TaskStatus } from '../../task/state/task.reducer';
-import { taskActions } from '../../task/state/task.actions';
-import { getSelectedTask } from '../../task/state/task.selectors';
 import { map, Observable, Subscription, tap } from 'rxjs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { ProgressStatus, Task } from '../../task.model';
+import { TaskStatus } from '../../state/task.reducer';
+import { getSelectedTask } from '../../state/task.selectors';
+import { taskActions } from '../../state/task.actions';
 
 
 @Component({

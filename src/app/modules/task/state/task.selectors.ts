@@ -1,4 +1,4 @@
-import { IAppState } from "../../state/app.state";
+import { IAppState } from "../../../state/app.state";
 
 export const getTasksAndOrderSelector = (appState: IAppState) =>{
   return {

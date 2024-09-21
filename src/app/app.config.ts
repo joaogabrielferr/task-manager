@@ -6,7 +6,7 @@ import { provideStore } from '@ngrx/store';
 import { appReducers } from './state/app.reducers';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
-import { addTaskEffect, changeTaskProgressStatusEffect, getTasksEffect, removeTaskEffect, updateTaskOrderEffect } from './task/state/task.effects';
+import { addTaskEffect, changeTaskProgressStatusEffect, getTasksEffect, removeTaskEffect, updateTaskOrderEffect } from './modules/task/state/task.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
